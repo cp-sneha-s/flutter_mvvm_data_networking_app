@@ -1,5 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:networking_example_app/model/person_model.dart';
+import 'package:networking_example_app/networking/remote_data_source.dart';
 
 class AddDataScreen extends StatefulWidget {
   @override
@@ -7,7 +9,18 @@ class AddDataScreen extends StatefulWidget {
 }
 
 class _AddDataScreenState extends State<AddDataScreen> {
-  TextEditingController controller = TextEditingController();
+  TextEditingController nameController = TextEditingController();
+  TextEditingController emailController = TextEditingController();
+  TextEditingController cityController = TextEditingController();
+
+  RemotedataSource _apiResponse = RemotedataSource();
+  late Future<List<Person>> personList ;
+
+  @override
+  void initState() {
+    super.initState();
+   personList= _apiResponse.getPerson();
+  }
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -21,9 +34,9 @@ class _AddDataScreenState extends State<AddDataScreen> {
               Padding(
                 padding: EdgeInsets.all(10),
                 child: TextField(
-                  controller: controller,
+                  controller: nameController,
                   onSubmitted: (name) {
-                    controller.text = name;
+                    nameController.text = name;
                   },
                   keyboardType: TextInputType.text,
                   decoration: InputDecoration(
@@ -37,9 +50,9 @@ class _AddDataScreenState extends State<AddDataScreen> {
               Padding(
                 padding: EdgeInsets.all(10),
                 child: TextField(
-                  controller: controller,
+                  controller: cityController,
                   onSubmitted: (name) {
-                    controller.text = name;
+                    cityController.text = name;
                   },
                   keyboardType: TextInputType.text,
                   decoration: InputDecoration(
@@ -53,9 +66,9 @@ class _AddDataScreenState extends State<AddDataScreen> {
               Padding(
                 padding: EdgeInsets.all(10),
                 child: TextField(
-                  controller: controller,
+                  controller: emailController,
                   onSubmitted: (name) {
-                    controller.text = name;
+                    emailController.text = name;
                   },
                   keyboardType: TextInputType.emailAddress,
                   decoration: InputDecoration(
@@ -68,6 +81,15 @@ class _AddDataScreenState extends State<AddDataScreen> {
               ),
               ElevatedButton(
                 onPressed: () {
+                  Person person = Person(name: nameController.text,
+                      city: cityController.text,
+                      email: emailController.text);
+                  setState(() {
+                    personList= _apiResponse.createPerson(person);
+                  });
+
+
+                  print(person.toString());
                   Navigator.pop(context);
                 },
                 child: Text('ADD DATA'),

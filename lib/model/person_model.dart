@@ -1,8 +1,8 @@
 class Person {
-  String? name;
-  String? city;
-  String? email;
-  Person({this.name, this.city, this.email});
+  String name;
+  String city;
+  String email;
+  Person({required this.name, required this.city, required this.email});
 
   factory Person.fromJson(Map<String, dynamic> json) {
     return Person(
